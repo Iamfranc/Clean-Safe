@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSO Clean Safe - Environmental Protection</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2d5016;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin-left: auto;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #4CAF50;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(45, 80, 22, 0.8), rgba(76, 175, 80, 0.6)),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%234CAF50;stop-opacity:0.1"/><stop offset="100%" style="stop-color:%232d5016;stop-opacity:0.3"/></linearGradient></defs><rect width="1200" height="800" fill="url(%23bg)"/><circle cx="200" cy="150" r="3" fill="%234CAF50" opacity="0.6"><animate attributeName="opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite"/></circle><circle cx="800" cy="300" r="2" fill="%234CAF50" opacity="0.4"><animate attributeName="opacity" values="0.4;0.8;0.4" dur="4s" repeatCount="indefinite"/></circle><circle cx="1000" cy="600" r="4" fill="%234CAF50" opacity="0.5"><animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/></circle></svg>') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #4CAF50, #66BB6A);
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 5rem 0;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            color: #4CAF50;
+            margin-bottom: 1rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2d5016;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 5rem 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #2d5016;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        /* Tips Section */
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .tip-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .tip-icon {
+            background: linear-gradient(45deg, #4CAF50, #66BB6A);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            font-size: 3rem;
+        }
+
+        .tip-content {
+            padding: 2rem;
+        }
+
+        .tip-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #2d5016;
+        }
+
+        .tip-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Chart Section */
+        .chart-section {
+            background: #f8f9fa;
+            text-align: center;
+        }
+
+        .chart-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        /* About Section */
+        .about {
+            background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .about-image {
+            text-align: center;
+            font-size: 15rem;
+            color: #4CAF50;
+            opacity: 0.7;
+        }
+
+        /* Contact Section */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #4CAF50, #66BB6A);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: #2d5016;
+            color: white;
+            padding: 3rem 0 1rem;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-link {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: #4CAF50;
+            transform: translateY(-3px);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: white;
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+                padding: 1rem 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .about-image {
+                font-size: 8rem;
+            }
+
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-leaf"></i>
+                CSO
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
+                <li><a href="#" class="nav-link" data-page="about">About</a></li>
+                <li><a href="#" class="nav-link" data-page="tips">Tips</a></li>
+                <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>CSO</h1>
+                <h1>A Clean Safe & Green Future</h1>
+                <p>Join us in protecting our planet through sustainable practices and environmental awareness. Together,
+                    we can make a difference for future generations.</p>
+                <a href="#" class="cta-button" data-page="tips">Start Making a Difference</a>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats section">
+            <div class="container">
+                <h2 class="section-title">Environmental Impact</h2>
+                <p class="section-subtitle">Understanding the numbers behind environmental challenges</p>
+                <div class="stats-grid">
+                    <div class="stat-card fade-in">
+                        <i class="fas fa-trash stat-icon"></i>
+                        <div class="stat-number">300M</div>
+                        <div class="stat-label">Tons of plastic waste annually</div>
+                    </div>
+                    <div class="stat-card fade-in">
+                        <i class="fas fa-tree stat-icon"></i>
+                        <div class="stat-number">10B</div>
+                        <div class="stat-label">Trees cut down each year</div>
+                    </div>
+                    <div class="stat-card fade-in">
+                        <i class="fas fa-water stat-icon"></i>
+                        <div class="stat-number">80%</div>
+                        <div class="stat-label">Of ocean pollution from land</div>
+                    </div>
+                    <div class="stat-card fade-in">
+                        <i class="fas fa-globe stat-icon"></i>
+                        <div class="stat-number">1.1°C</div>
+                        <div class="stat-label">Global temperature rise</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart Section -->
+        <section class="chart-section section">
+            <div class="container">
+                <h2 class="section-title">Pollution Sources</h2>
+                <p class="section-subtitle">Breaking down the main contributors to environmental pollution</p>
+                <div class="chart-container">
+                    <canvas id="pollutionChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission Quote -->
+        <section class="section"
+            style="background: linear-gradient(135deg, #4CAF50, #66BB6A); color: white; text-align: center;">
+            <div class="container">
+                <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: white;">"The Earth does not belong to us; we
+                    belong to the Earth."</h2>
+                <p style="font-size: 1.2rem; opacity: 0.9;">- Chief Seattle</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- About Page -->
+    <div id="about" class="page">
+        <section class="about section" style="padding-top: 8rem;">
+            <div class="container">
+                <h2 class="section-title">About Clean Safe</h2>
+                <p class="section-subtitle">Our mission to protect and preserve our planet for future generations</p>
+                <div class="about-content">
+                    <div class="about-text">
+                        <h3 style="color: #2d5016; font-size: 1.5rem; margin-bottom: 1rem;">Our Mission</h3>
+                        <p>Clean Safe is a community-driven initiative dedicated to raising awareness about
+                            environmental protection and promoting sustainable practices. We believe that every
+                            individual has the power to make a positive impact on our planet.</p>
+
+                        <h3 style="color: #2d5016; font-size: 1.5rem; margin: 2rem 0 1rem;">Our Vision</h3>
+                        <p>We envision a world where clean air, pure water, and thriving ecosystems are not luxuries but
+                            fundamental rights. Through education, action, and collaboration, we work towards a
+                            sustainable future for all living beings.</p>
+
+                        <h3 style="color: #2d5016; font-size: 1.5rem; margin: 2rem 0 1rem;">Our Impact</h3>
+                        <p>Since our founding, we have organized over 150 community clean-up events, planted more than
+                            5,000 trees, and educated thousands of people about sustainable living practices. Join us in
+                            making a difference!</p>
+                    </div>
+                    <div class="about-image">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section class="section" style="background: #f8f9fa;">
+            <div class="container">
+                <h2 class="section-title">Our Journey</h2>
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <div style="display: grid; gap: 2rem; margin-top: 3rem;">
+                        <div
+                            style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+                            <h4 style="color: #4CAF50; font-size: 1.2rem; margin-bottom: 0.5rem;">2020 - Foundation</h4>
+                            <p>Clean Safe was founded by a group of environmental science students passionate about
+                                making a difference in their community.</p>
+                        </div>
+                        <div
+                            style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+                            <h4 style="color: #4CAF50; font-size: 1.2rem; margin-bottom: 0.5rem;">2021 - First Major
+                                Campaign</h4>
+                            <p>Launched our first city-wide plastic reduction campaign, reaching over 10,000 households
+                                with educational materials.</p>
+                        </div>
+                        <div
+                            style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+                            <h4 style="color: #4CAF50; font-size: 1.2rem; margin-bottom: 0.5rem;">2022 - Community
+                                Expansion</h4>
+                            <p>Expanded operations to five neighboring cities and partnered with local schools for
+                                environmental education programs.</p>
+                        </div>
+                        <div
+                            style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+                            <h4 style="color: #4CAF50; font-size: 1.2rem; margin-bottom: 0.5rem;">2025 - Global Impact
+                            </h4>
+                            <p>Today, we continue to grow our impact through digital outreach, community partnerships,
+                                and innovative sustainability projects.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Tips Page -->
+    <div id="tips" class="page">
+        <section class="section" style="padding-top: 8rem; background: #f8f9fa;">
+            <div class="container">
+                <h2 class="section-title">Environmental Tips</h2>
+                <p class="section-subtitle">Simple actions you can take to protect our planet</p>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <i class="fas fa-recycle"></i>
+                        </div>
+                        <div class="tip-content">
+                            <h3 class="tip-title">Reduce, Reuse, Recycle</h3>
+                            <p class="tip-description">Follow the 3 R's hierarchy: reduce consumption, reuse items
+                                creatively, and recycle materials properly. This simple approach can significantly
+                                reduce your environmental footprint.</p>
+                        </div>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <i class="fas fa-ban"></i>
+                        </div>
+                        <div class="tip-content">
+                            <h3 class="tip-title">Avoid Single-Use Plastics</h3>
+                            <p class="tip-description">Replace disposable items with reusable alternatives. Use cloth
+                                bags, metal straws, and refillable water bottles to reduce plastic waste that pollutes
+                                our oceans and landfills.</p>
+                        </div>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <div class="tip-content">
+                            <h3 class="tip-title">Join Clean-up Events</h3>
+                            <p class="tip-description">Participate in local beach, park, or neighborhood clean-up
+                                activities. These events make an immediate impact while building community awareness
+                                about environmental issues.</p>
+                        </div>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="tip-content">
+                            <h3 class="tip-title">Plant Trees & Gardens</h3>
+                            <p class="tip-description">Trees absorb CO2 and produce oxygen. Start a garden, plant native
+                                species, or support reforestation projects. Even small green spaces contribute to
+                                cleaner air and biodiversity.</p>
+                        </div>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <div class="tip-content">
+                            <h3 class="tip-title">Save Energy</h3>
+                            <p class="tip-description">Switch to LED bulbs, unplug electronics when not in use, and use
+                                energy-efficient appliances. Reducing energy consumption lowers greenhouse gas emissions
+                                and saves money.</p>
+                        </div>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <i class="fas fa-bicycle"></i>
+                        </div>
+                        <div class="tip-content">
+                            <h3 class="tip-title">Choose Sustainable Transport</h3>
+                            <p class="tip-description">Walk, bike, use public transport, or carpool when possible.
+                                Transportation is a major source of air pollution, so eco-friendly alternatives make a
+                                real difference.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Additional Tips Section -->
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">More Ways to Help</h2>
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                    <div style="text-align: center; padding: 2rem;">
+                        <i class="fas fa-water" style="font-size: 3rem; color: #4CAF50; margin-bottom: 1rem;"></i>
+                        <h3 style="color: #2d5016; margin-bottom: 1rem;">Conserve Water</h3>
+                        <p style="color: #666;">Fix leaks, take shorter showers, and collect rainwater for gardening.
+                            Every drop counts in preserving this precious resource.</p>
+                    </div>
+                    <div style="text-align: center; padding: 2rem;">
+                        <i class="fas fa-shopping-bag"
+                            style="font-size: 3rem; color: #4CAF50; margin-bottom: 1rem;"></i>
+                        <h3 style="color: #2d5016; margin-bottom: 1rem;">Buy Local & Organic</h3>
+                        <p style="color: #666;">Support local farmers and choose organic products when possible. This
+                            reduces transportation emissions and supports sustainable agriculture.</p>
+                    </div>
+                    <div style="text-align: center; padding: 2rem;">
+                        <i class="fas fa-share-alt" style="font-size: 3rem; color: #4CAF50; margin-bottom: 1rem;"></i>
+                        <h3 style="color: #2d5016; margin-bottom: 1rem;">Spread Awareness</h3>
+                        <p style="color: #666;">Share environmental tips with friends and family. Education and
+                            awareness are powerful tools for creating positive change.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact" class="page">
+        <section class="section" style="padding-top: 8rem; background: #f8f9fa;">
+            <div class="container">
+                <h2 class="section-title">Get In Touch</h2>
+                <p class="section-subtitle">Join our mission to protect the environment</p>
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Info -->
+        <section class="section">
+            <div class="container">
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; text-align: center;">
+                    <div>
+                        <i class="fas fa-envelope" style="font-size: 2rem; color: #4CAF50; margin-bottom: 1rem;"></i>
+                        <h3 style="color: #2d5016; margin-bottom: 0.5rem;">Email Us</h3>
+                        <p style="color: #666;">contact@cleanearth.org</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-phone" style="font-size: 2rem; color: #4CAF50; margin-bottom: 1rem;"></i>
+                        <h3 style="color: #2d5016; margin-bottom: 0.5rem;">Call Us</h3>
+                        <p style="color: #666;">+254114630818</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-map-marker-alt"
+                            style="font-size: 2rem; color: #4CAF50; margin-bottom: 1rem;"></i>
+                        <h3 style="color: #2d5016; margin-bottom: 0.5rem;">Visit Us</h3>
+                        <p style="color: #666;">111 Ngong Street, Nairobi City</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="social-links">
+                <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p>&copy; 2025 Clean Safe. All rights reserved. Together for a sustainable future.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation functionality
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('nav-menu');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
+
+        // Toggle mobile menu
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Handle page navigation
+        function showPage(pageId) {
+            // Hide all pages
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+
+            // Update active nav link
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
+
+            // Close mobile menu
+            navMenu.classList.remove('active');
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Add click event to nav links
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('data-page');
+                showPage(pageId);
+            });
+        });
+
+        // CTA button functionality
+        document.querySelector('.cta-button').addEventListener('click', (e) => {
+            e.preventDefault();
+            showPage('tips');
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Counter animation for stats
+        function animateCounter(element, target) {
+            let current = 0;
+            const increment = target / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+
+                if (target >= 1000000000) {
+                    element.textContent = (current / 1000000000).toFixed(1) + 'B';
+                } else if (target >= 1000000) {
+                    element.textContent = (current / 1000000).toFixed(0) + 'M';
+                } else if (target >= 1000) {
+                    element.textContent = (current / 1000).toFixed(0) + 'K';
+                } else if (target < 10) {
+                    element.textContent = current.toFixed(1) + '°C';
+                } else if (target <= 100) {
+                    element.textContent = Math.round(current) + '%';
+                } else {
+                    element.textContent = Math.round(current);
+                }
+            }, 20);
+        }
+
+        // Animate stats when they come into view
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumbers = entry.target.querySelectorAll('.stat-number');
+                    const targets = [300000000, 10000000000, 80, 1.1];
+
+                    statNumbers.forEach((stat, index) => {
+                        animateCounter(stat, targets[index]);
+                    });
+
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        statsObserver.observe(document.querySelector('.stats'));
+
+        // Initialize Chart.js
+        function initPollutionChart() {
+            const ctx = document.getElementById('pollutionChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Industrial Waste', 'Vehicle Emissions', 'Agricultural Runoff', 'Plastic Waste', 'Energy Production', 'Other'],
+                    datasets: [{
+                        data: [28, 24, 18, 15, 10, 5],
+                        backgroundColor: [
+                            '#ff6b6b',  // Industrial - Red
+                            '#4ecdc4',  // Vehicle - Teal
+                            '#45b7d1',  // Agricultural - Blue
+                            '#96ceb4',  // Plastic - Light Green
+                            '#ffd93d',  // Energy - Yellow
+                            '#b19cd9'   // Other - Purple
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.label + ': ' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '50%'
+                }
+            });
+        }
+
+        // Contact form handling
+        document.getElementById('contactForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Get form data
+            const formData = new FormData(this);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const subject = formData.get('subject');
+            const message = formData.get('message');
+
+            // Simple form validation
+            if (!name || !email || !subject || !message) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            // Simulate form submission
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+
+            setTimeout(() => {
+                alert('Thank you for your message! We\'ll get back to you soon.');
+                this.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+
+        // Initialize chart when page loads
+        window.addEventListener('load', () => {
+            initPollutionChart();
+        });
+
+        // Add smooth scrolling effect for better UX
+        document.documentElement.style.scrollBehavior = 'smooth';
+
+        // Add loading animation
+        window.addEventListener('load', () => {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Add hover effects for tip cards
+        const tipCards = document.querySelectorAll('.tip-card');
+        tipCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Add parallax effect to hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero && window.innerWidth > 768) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Testimonials data (for future expansion)
+        const testimonials = [
+            {
+                name: "Sarah Johnson",
+                role: "Environmental Activist",
+                message: "Clean Earth has been instrumental in bringing our community together for environmental action. Their initiatives have made a real difference in our local ecosystem."
+            },
+            {
+                name: "Mike Chen",
+                role: "Teacher",
+                message: "The educational resources provided by Clean Earth have helped me teach my students about environmental responsibility in an engaging and practical way."
+            },
+            {
+                name: "Emma Rodriguez",
+                role: "Community Volunteer",
+                message: "Being part of Clean Earth's cleanup events has been incredibly rewarding. It's amazing to see how much we can accomplish when we work together."
+            }
+        ];
+
+        // Initialize tooltips for better accessibility
+        const initTooltips = () => {
+            const elements = document.querySelectorAll('[title]');
+            elements.forEach(element => {
+                element.addEventListener('mouseenter', (e) => {
+                    const tooltip = document.createElement('div');
+                    tooltip.className = 'tooltip';
+                    tooltip.textContent = e.target.getAttribute('title');
+                    tooltip.style.cssText = `
+                        position: absolute;
+                        background: #333;
+                        color: white;
+                        padding: 8px 12px;
+                        border-radius: 4px;
+                        font-size: 14px;
+                        pointer-events: none;
+                        z-index: 1000;
+                        opacity: 0;
+                        transition: opacity 0.3s ease;
+                    `;
+                    document.body.appendChild(tooltip);
+
+                    const rect = e.target.getBoundingClientRect();
+                    tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
+                    tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
+
+                    setTimeout(() => tooltip.style.opacity = '1', 10);
+                });
+
+                element.addEventListener('mouseleave', () => {
+                    const tooltip = document.querySelector('.tooltip');
+                    if (tooltip) {
+                        tooltip.remove();
+                    }
+                });
+            });
+        };
+
+        // Call initialization functions
+        initTooltips();
+
+        // Add keyboard navigation support
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                navMenu.classList.remove('active');
+            }
+        });
+
+        // Performance optimization: Lazy load images
+        const lazyImages = document.querySelectorAll('img[data-src]');
+        const imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    img.classList.remove('lazy');
+                    imageObserver.unobserve(img);
+                }
+            });
+        });
+
+        lazyImages.forEach(img => imageObserver.observe(img));
+
+        console.log('Clean Earth website initialized successfully! 🌱');
+    </script>
+</body>
+
+</html>
